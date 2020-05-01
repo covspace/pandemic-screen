@@ -1,0 +1,6 @@
+{
+    "require": {
+        "mongodb/mongodb": "1.4",
+        "league/plates": "^3.3"
+    }
+}

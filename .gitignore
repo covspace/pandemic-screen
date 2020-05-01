@@ -1,0 +1,6 @@
+vendor/
+backups/
+composer.phar
+composer.lock
+config.php
+config.js
