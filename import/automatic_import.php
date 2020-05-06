@@ -6,6 +6,12 @@
 
 $importScripts = glob('*/import.py');
 
-foreach ($importScripts as $filename) {
-    echo "$filename<br>";
+foreach ($importScripts as $filename)
+{
+    $dir = dirname($filename);
+    $file = basename($filename);
+    echo "dir $dir, file $file";
+    chdir($dir);
+    #system("python $filename", $retArr, $retVal);
+    echo "$retArr";
 }
