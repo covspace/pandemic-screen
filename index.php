@@ -5,8 +5,8 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="initial-scale=1.0" />
     <link rel="stylesheet" type="text/css" href="style.css" />
-	<script src="/js/jquery-3.5.0.min.js"></script>
-  <script src="/js/numeral.min.js"></script>
+	<script src="js/jquery-3.5.0.min.js"></script>
+  <script src="js/numeral.min.js"></script>
   <script type='text/javascript' src='config.js'></script>
 <link rel="stylesheet" href="https://fonts.googleapis.com/icon?family=Material+Icons">
   </head>
@@ -36,7 +36,7 @@ function initMap() {
   map.data.addListener('click', handleClickFeature);
 
   // layer selection
-	$('#hidden').load('/generate_layer_selection.php', function(){
+	$('#hidden').load('generate_layer_selection.php', function(){
     var centerControl = document.getElementById('layer_selector_box');
 
   	centerControl.index = 1;
@@ -66,7 +66,7 @@ function updateMapLayer()
     i.close();
   });*/
 
-  $.ajax({'url': '/get_geojson.php?dataSource='+dataState['selectedDataSource']+'&dataEntity='+dataState['selectedDataEntity']}).done(function(data){
+  $.ajax({'url': 'get_geojson.php?dataSource='+dataState['selectedDataSource']+'&dataEntity='+dataState['selectedDataEntity']}).done(function(data){
     map.data.addGeoJson(data.data);
 
     var allNumbers = [];
@@ -96,7 +96,7 @@ function handleClickFeature(e) {
   infoWindow.open(map, markerObj);
   infoWindows.push(infoWindow); infoWindow.setContent(d); */
 
-  $.ajax({url: '/generate_infobox_left.php', data: {countryId: e.feature.getProperty('countryId'), dataSource: e.feature.getProperty('dataSource')}}).done(function(d){
+  $.ajax({url: 'generate_infobox_left.php', data: {countryId: e.feature.getProperty('countryId'), dataSource: e.feature.getProperty('dataSource')}}).done(function(d){
     infoBoxLeft = document.createElement('div');
     infoBoxLeft.id = 'infobox_left_container';
     $(infoBoxLeft).append(d);
