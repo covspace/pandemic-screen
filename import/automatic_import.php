@@ -10,8 +10,12 @@ foreach ($importScripts as $filename)
 {
     $dir = dirname($filename);
     $file = basename($filename);
-    echo "dir $dir, file $file";
-    chdir($dir);
-    #system("python $filename", $retArr, $retVal);
-    echo "$retArr";
+    echo "dir $dir, file $file\n";
+    if(is_file($filename))
+    {
+      chdir($dir);
+      system("python $filename", $retArr, $retVal);
+      echo "$retArr\n";
+    }
+
 }
