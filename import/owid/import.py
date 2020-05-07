@@ -4,6 +4,20 @@ import csv
 import pymongo
 import datetime
 
+import urllib2
+import os
+
+# dl
+#https://raw.githubusercontent.com/owid/covid-19-data/master/public/data/owid-covid-data.csv
+todayDt = datetime.datetime.today()
+url = 'https://raw.githubusercontent.com/owid/covid-19-data/master/public/data/owid-covid-data.csv'
+f = urllib2.urlopen(url)
+print "downloading " + url
+
+# Open our local file for writing
+with open(os.path.basename(url), "wb") as local_file:
+	local_file.write(f.read())
+
 myclient = pymongo.MongoClient("mongodb://localhost:27017/")
 mydb = myclient["covspace"]
 countriesdb = mydb["countries"]
@@ -22,6 +36,10 @@ with open('owid-covid-data.csv') as csvfile:
 			# "new_deaths", "total_cases_per_million", "new_cases_per_million",
 			# "total_deaths_per_million", "new_deaths_per_million", "total_tests", "new_tests",
 			# "total_tests_per_thousand","new_tests_per_thousand", "tests_units" ],
+			# only import most recent date
+			if(datetime.datetime.strptime(row['date'], '%Y-%m-%d') != todayDt):
+				continue
+
 			# first put in -1 for no data
 			for k,v in enumerate(row):
 				if not row[v]:
@@ -34,5 +52,7 @@ with open('owid-covid-data.csv') as csvfile:
 				'total_tests': int(row['total_tests']), 'new_tests': int(row['new_tests']), 'total_tests_per_thousand': float(row['total_tests_per_thousand']),
 				'new_tests_per_thousand': float(row['new_tests_per_thousand']), 'tests_units': str(row['tests_units']) }
 			print dict
-			x = owid.insert_one(dict)
+			#x = owid.insert_one(dict)
 			print x
+
+os.remove('owid-covid-data.csv')
