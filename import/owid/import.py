@@ -10,7 +10,7 @@ import os
 # dl
 #https://raw.githubusercontent.com/owid/covid-19-data/master/public/data/owid-covid-data.csv
 todayDt = datetime.datetime.today()
-url = 'https://raw.githubusercontent.com/owid/covid-19-data/master/public/data/owid-covid-data.csv'
+url = 'https://covid.ourworldindata.org/data/owid-covid-data.csv'
 f = urllib2.urlopen(url)
 print "downloading " + url
 
