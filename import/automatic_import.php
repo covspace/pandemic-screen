@@ -4,7 +4,7 @@
  * 06.05.2020 Sebastian Sitaru
  */
 
-$importScripts = glob('*/import.py');
+$importScripts = glob(dirname(__FILE__).'/*/import.py');
 
 foreach ($importScripts as $filename)
 {
@@ -14,7 +14,7 @@ foreach ($importScripts as $filename)
     if(is_file($filename))
     {
       chdir($dir);
-      system("python $filename", $retArr, $retVal);
+      system("python $filename", $retArr);
       echo "$retArr\n";
     }
 
