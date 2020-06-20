@@ -6,6 +6,7 @@ import pymongo
 import datetime
 import urllib2
 import os
+import codecs
 
 response = urllib2.urlopen('https://opendata.ecdc.europa.eu/covid19/casedistribution/csv')
 data = response.read()
@@ -18,9 +19,9 @@ todayDt = datetime.datetime.today()
 myclient = pymongo.MongoClient("mongodb://admin:covid19season@localhost:27017")
 mydb = myclient["covspace"]
 countriesdb = mydb["countries"]
-owid = mydb["eurostat-population"]
+owid = mydb["ecdc"]
 
-with open('data.csv') as csvfile:
+with codecs.open('data.csv', 'r', encoding='ascii', errors='ignore') as csvfile:
 	reader = csv.DictReader(csvfile)
 	for row in reader:
 		# dateRep,day,month,year,cases,deaths,countriesAndTerritories,geoId,countryterritoryCode,popData2018,continentExp
@@ -36,7 +37,7 @@ with open('data.csv') as csvfile:
 					row[v] = -1
 			# dateRep,day,month,year,cases,deaths,countriesAndTerritories,geoId,countryterritoryCode,popData2018,continentExp
 			dict = { "country_id": country['_id'], "date": datetime.datetime.strptime(row['dateRep'], '%d/%m/%Y'),
-				'cases': int(row['cases']), 'deaths': int(row['deaths']), 'popData2018': int(row['popData2018']) }
+				'cases': int(row['cases']), 'deaths': int(row['deaths']), 'popData2018': int(row['popData2019']) }
 			print dict
 			x = owid.insert_one(dict)
 
