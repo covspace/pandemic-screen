@@ -1,4 +1,5 @@
 #!/usr/bin/python
+# import/cssedb/import.py
 
 import csv
 import pymongo
@@ -23,18 +24,27 @@ mydb = myclient["covspace"]
 cssedb = mydb["cssedb"]
 countriesdb = mydb["countries"]
 
-
+rowsToInsert = {}
 
 with open(today+'.csv') as csvfile:
 	reader = csv.DictReader(csvfile)
 	for row in reader:
 		# FIPS,Admin2,Province_State,Country_Region,Last_Update,Lat,Long_,Confirmed,Deaths,Recovered,Active,Combined_Key
-		country = countriesdb.find_one({'country_name': row['Combined_Key']})
+		country = countriesdb.find_one({'country_name': row['Country_Region']})
 		if country:
 			# required: [ "country_id", "confirmed", "deaths", "recovered" ]
-			dict = { "country_id": country['_id'], "confirmed": int(row['Confirmed']), "deaths": int(row['Deaths']), "recovered": int(row['Recovered']), "date": todayDt }
+			if not row['Country_Region'] in rowsToInsert:
+				dict = { "country_id": country['_id'], "confirmed": int(row['Confirmed']), "deaths": int(row['Deaths']), "recovered": int(row['Recovered']), "date": todayDt }
+				rowsToInsert[row['Country_Region']] = dict
+				print rowsToInsert
+			else:
+				rowsToInsert[row['Country_Region']]["confirmed"] = rowsToInsert[row['Country_Region']]["confirmed"]+ int(row['Confirmed'])
+				rowsToInsert[row['Country_Region']]["deaths"] = rowsToInsert[row['Country_Region']]["deaths"]+ int(row['Deaths'])
+				rowsToInsert[row['Country_Region']]["recovered"] = rowsToInsert[row['Country_Region']]["recovered"]+ int(row['Recovered'])
 			print dict
-			x = cssedb.insert_one(dict)
-			print x
+
+for key, v in rowsToInsert.iteritems():
+	x = cssedb.insert_one(v)
+	print x
 
 os.remove(today+'.csv')
