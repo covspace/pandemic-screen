@@ -160,16 +160,16 @@ db.createCollection("owid", {
 				       bsonType: "date"
 			      },
             total_cases: {
-               bsonType: "int",
+               bsonType: "double",
             },
             new_cases: {
-               bsonType: "int",
+               bsonType: "double",
             },
             total_deaths: {
-               bsonType: "int",
+               bsonType: "double",
             },
 			new_deaths: {
-               bsonType: "int",
+               bsonType: "double",
             },
 			total_cases_per_million: {
                bsonType: "double",
